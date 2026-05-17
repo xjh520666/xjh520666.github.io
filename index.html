@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator - Free & Simple</title>
+    <!-- AdSense 自动广告代码（后面替换） -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+     crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .calculator-card {
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            width: 100%;
+            max-width: 420px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+        .header p {
+            font-size: 16px;
+            color: #6b7280;
+        }
+        .unit-toggle {
+            display: flex;
+            background: #f3f4f6;
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 32px;
+        }
+        .unit-toggle button {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            font-weight: 600;
+            color: #6b7280;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .unit-toggle button.active {
+            background: #667eea;
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        .input-group {
+            margin-bottom: 24px;
+        }
+        .input-label {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 0 16px;
+            transition: border-color 0.2s ease;
+        }
+        .input-wrapper:focus-within {
+            border-color: #667eea;
+        }
+        .input-wrapper input {
+            flex: 1;
+            padding: 14px 0;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            outline: none;
+        }
+        .input-wrapper .unit {
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 500;
+            min-width: 40px;
+            text-align: right;
+        }
+        .dual-input-wrapper {
+            display: flex;
+            gap: 12px;
+            flex: 1;
+        }
+        .hint-text {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 6px;
+        }
+        .calculate-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 8px;
+        }
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        .result-section {
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid #e5e7eb;
+            display: none;
+        }
+        .result-section.show {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .bmi-value {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .bmi-value .number {
+            font-size: 64px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .bmi-value .label {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+        .category-badge {
+            text-align: center;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .category-badge.underweight {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        .category-badge.normal {
+            background: #dcfce7;
+            color: #15803d;
+        }
+        .category-badge.overweight {
+            background: #fff3e0;
+            color: #c2410c;
+        }
+        .category-badge.obese {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .health-tip {
+            font-size: 14px;
+            color: #4b5563;
+            text-align: center;
+            line-height: 1.5;
+        }
+        /* 广告位样式 */
+        .ad-container {
+            width: 100%;
+            max-width: 420px;
+            margin: 20px auto;
+            text-align: center;
+        }
+        @media (max-width: 480px) {
+            .calculator-card {
+                padding: 28px;
+            }
+            .header h1 {
+                font-size: 28px;
+            }
+            .bmi-value .number {
+                font-size: 52px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 广告位1：顶部 -->
+    <div class="ad-container">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="1234567890"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+    </div>
+
+    <div class="calculator-card">
+        <div class="header">
+            <h1>BMI Calculator</h1>
+            <p>Calculate your Body Mass Index quickly and easily</p>
+        </div>
+
+        <div class="unit-toggle">
+            <button id="metricBtn" class="active" onclick="switchUnit('metric')">Metric</button>
+            <button id="imperialBtn" onclick="switchUnit('imperial')">Imperial</button>
+        </div>
+
+        <form id="bmiForm" onsubmit="calculateBMI(event)">
+            <div class="input-group">
+                <label class="input-label">Height</label>
+                <div id="metricHeight" class="input-row">
+                    <div class="input-wrapper">
+                        <input type="number" id="heightCm" placeholder="Enter your height" step="0.1" min="50" max="300" oninput="hideResult()">
+                        <span class="unit">cm</span>
+                    </div>
+                </div>
+                <div id="imperialHeight" class="input-row" style="display: none;">
+                    <div class="dual-input-wrapper">
+                        <div class="input-wrapper">
+                            <input type="number" id="heightFt" placeholder="Feet" min="1" max="9" oninput="hideResult()">
+                            <span class="unit">ft</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <input type="number" id="heightIn" placeholder="Inches" min="0" max="11" oninput="hideResult()">
+                            <span class="unit">in</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="hint-text" id="heightHint" style="display: none;">Example: 5 ft 8 in = 173 cm</p>
+            </div>
+            <div class="input-group">
+                <label class="input-label">Weight</label>
+                <div class="input-row">
+                    <div class="input-wrapper">
+                        <input type="number" id="weight" placeholder="Enter your weight" step="0.1" min="1" max="1100" oninput="hideResult()">
+                        <span class="unit" id="weightUnit">kg</span>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="calculate-btn">Calculate BMI</button>
+        </form>
+
+        <div class="result-section" id="resultSection">
+            <div class="bmi-value">
+                <div class="number" id="bmiNumber">0.0</div>
+                <div class="label">Your BMI</div>
+            </div>
+            <div class="category-badge" id="categoryBadge"></div>
+            <p class="health-tip" id="healthTip"></p>
+        </div>
+    </div>
+
+    <!-- 广告位2：底部 -->
+    <div class="ad-container">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="0987654321"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+    </div>
+
+    <script>
+        let currentUnit = 'metric';
+        function switchUnit(unit) {
+            currentUnit = unit;
+            const metricBtn = document.getElementById('metricBtn');
+            const imperialBtn = document.getElementById('imperialBtn');
+            const metricHeight = document.getElementById('metricHeight');
+            const imperialHeight = document.getElementById('imperialHeight');
+            const weightInput = document.getElementById('weight');
+            const weightUnit = document.getElementById('weightUnit');
+            const heightHint = document.getElementById('heightHint');
+            if (unit === 'metric') {
+                metricBtn.classList.add('active');
+                imperialBtn.classList.remove('active');
+                metricHeight.style.display = 'flex';
+                imperialHeight.style.display = 'none';
+                heightHint.style.display = 'none';
+                weightInput.placeholder = 'Enter your weight';
+                weightUnit.textContent = 'kg';
+            } else {
+                imperialBtn.classList.add('active');
+                metricBtn.classList.remove('active');
+                metricHeight.style.display = 'none';
+                imperialHeight.style.display = 'flex';
+                heightHint.style.display = 'block';
+                weightInput.placeholder = 'Enter your weight';
+                weightUnit.textContent = 'lbs';
+            }
+            clearInputs();
+            hideResult();
+        }
+        function clearInputs() {
+            document.getElementById('heightCm').value = '';
+            document.getElementById('heightFt').value = '';
+            document.getElementById('heightIn').value = '';
+            document.getElementById('weight').value = '';
+        }
+        function hideResult() {
+            document.getElementById('resultSection').classList.remove('show');
+        }
+        function calculateBMI(event) {
+            event.preventDefault();
+            let heightInMeters, weightInKg;
+            if (currentUnit === 'metric') {
+                const heightCm = parseFloat(document.getElementById('heightCm').value);
+                weightInKg = parseFloat(document.getElementById('weight').value);
+                if (isNaN(heightCm) || heightCm < 50 || heightCm > 300 || isNaN(weightInKg) || weightInKg < 1 || weightInKg > 500) {
+                    alert('Please enter valid height (50-300 cm) and weight (1-500 kg).');
+                    return;
+                }
+                heightInMeters = heightCm / 100;
+            } else {
+                const feet = parseFloat(document.getElementById('heightFt').value) || 0;
+                const inches = parseFloat(document.getElementById('heightIn').value) || 0;
+                const weightLbs = parseFloat(document.getElementById('weight').value);
+                if ((isNaN(feet) || feet < 1 || feet > 9) || (isNaN(inches) || inches < 0 || inches > 11) || (feet === 0 && inches === 0) || isNaN(weightLbs) || weightLbs < 1 || weightLbs > 1100) {
+                    alert('Please enter valid height (1-9 ft, 0-11 in) and weight (1-1100 lbs).');
+                    return;
+                }
+                const totalInches = feet * 12 + inches;
+                heightInMeters = totalInches * 0.0254;
+                weightInKg = weightLbs * 0.453592;
+            }
+            const bmi = weightInKg / (heightInMeters * heightInMeters);
+            const roundedBMI = Math.round(bmi * 10) / 10;
+            displayResult(roundedBMI);
+        }
+        function displayResult(bmi) {
+            const resultSection = document.getElementById('resultSection');
+            const bmiNumber = document.getElementById('bmiNumber');
+            const categoryBadge = document.getElementById('categoryBadge');
+            const healthTip = document.getElementById('healthTip');
+            resultSection.classList.add('show');
+            bmiNumber.textContent = bmi.toFixed(1);
+            let category, className, tip;
+            if (bmi < 18.5) {
+                category = 'Underweight';
+                className = 'underweight';
+                tip = 'You may need to gain some weight. Consider consulting a healthcare provider for personalized advice.';
+            } else if (bmi >= 18.5 && bmi < 25) {
+                category = 'Normal Weight';
+                className = 'normal';
+                tip = 'Great job! Your weight is within the healthy range. Keep up the good habits!';
+            } else if (bmi >= 25 && bmi < 30) {
+                category = 'Overweight';
+                className = 'overweight';
+                tip = 'Small lifestyle changes like regular exercise and balanced meals can help you reach a healthier weight.';
+            } else {
+                category = 'Obese';
+                className = 'obese';
+                tip = 'Consider talking to a doctor or dietitian for a personalized plan to improve your health.';
+            }
+            categoryBadge.textContent = category;
+            categoryBadge.className = `category-badge ${className}`;
+            healthTip.textContent = tip;
+        }
+    </script>
+</body>
+</html>
