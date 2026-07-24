@@ -1,0 +1,111 @@
+<h2>金铲铲实时推荐APP - 系统架构概览</h2>
+<p class="subtitle">这是一个复杂的AI移动端项目，包含多个核心子系统。请先看整体架构，然后我们确定第一期MVP的范围。</p>
+
+<div class="mockup">
+  <div class="mockup-header">整体系统架构图</div>
+  <div class="mockup-body" style="padding: 20px; background: #f8fafc;">
+    <div style="display: grid; grid-template-columns: 1fr; gap: 16px; font-family: system-ui;">
+      
+      <!-- 安卓应用层 -->
+      <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 12px; padding: 16px;">
+        <h3 style="margin:0 0 12px 0; font-size: 18px;">📱 安卓应用层 (优先联发科处理器)</h3>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+          <div style="background: rgba(255,255,255,0.2); border-radius: 8px; padding: 12px; text-align: center;">
+            <div style="font-size: 24px; margin-bottom: 4px;">🎮</div>
+            <div style="font-size: 12px; font-weight: 600;">屏幕捕获/识别</div>
+            <div style="font-size: 10px; opacity: 0.8;">MediaProjection + OCR + CV</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.2); border-radius: 8px; padding: 12px; text-align: center;">
+            <div style="font-size: 24px; margin-bottom: 4px;">🧠</div>
+            <div style="font-size: 12px; font-weight: 600;">AI推理引擎</div>
+            <div style="font-size: 10px; opacity: 0.8;">NNAPI / MediaTek APU</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.2); border-radius: 8px; padding: 12px; text-align: center;">
+            <div style="font-size: 24px; margin-bottom: 4px;">💡</div>
+            <div style="font-size: 12px; font-weight: 600;">悬浮窗推荐UI</div>
+            <div style="font-size: 10px; opacity: 0.8;">实时覆盖层</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- AI引擎层 -->
+      <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border-radius: 12px; padding: 16px;">
+        <h3 style="margin:0 0 12px 0; font-size: 18px;">🤖 AI智能层</h3>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+          <div style="background: rgba(255,255,255,0.2); border-radius: 8px; padding: 12px; text-align: center;">
+            <div style="font-size: 20px; margin-bottom: 4px;">📊</div>
+            <div style="font-size: 11px; font-weight: 600;">弈子识别</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.2); border-radius: 8px; padding: 12px; text-align: center;">
+            <div style="font-size: 20px; margin-bottom: 4px;">🎯</div>
+            <div style="font-size: 11px; font-weight: 600;">阵容推荐</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.2); border-radius: 8px; padding: 12px; text-align: center;">
+            <div style="font-size: 20px; margin-bottom: 4px;">📈</div>
+            <div style="font-size: 11px; font-weight: 600;">装备推荐</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.2); border-radius: 8px; padding: 12px; text-align: center;">
+            <div style="font-size: 20px; margin-bottom: 4px;">🔄</div>
+            <div style="font-size: 11px; font-weight: 600;">在线学习</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 云端数据层 -->
+      <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border-radius: 12px; padding: 16px;">
+        <h3 style="margin:0 0 12px 0; font-size: 18px;">☁️ 云端数据/服务层</h3>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+          <div style="background: rgba(255,255,255,0.2); border-radius: 8px; padding: 12px; text-align: center;">
+            <div style="font-size: 20px; margin-bottom: 4px;">🌐</div>
+            <div style="font-size: 11px; font-weight: 600;">全网攻略抓取</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.2); border-radius: 8px; padding: 12px; text-align: center;">
+            <div style="font-size: 20px; margin-bottom: 4px;">🏆</div>
+            <div style="font-size: 11px; font-weight: 600;">大数据胜率分析</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.2); border-radius: 8px; padding: 12px; text-align: center;">
+            <div style="font-size: 20px; margin-bottom: 4px;">🔄</div>
+            <div style="font-size: 11px; font-weight: 600;">模型更新推送</div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<div style="margin-top: 24px;">
+  <h3>⚠️ 项目范围确认 - MVP第一期应该包含哪些核心功能？</h3>
+  <p class="subtitle">请选择我们第一阶段要优先实现的核心功能（可多选），点击选择后在终端告诉我你的想法。</p>
+  
+  <div class="options" data-multiselect>
+    <div class="option" data-choice="core_overlay" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>基础悬浮窗 + 手动阵容推荐</h3>
+        <p>不做屏幕识别，用户手动输入当前状态，APP展示推荐阵容和装备，内置主流阵容库（最容易快速出成果）</p>
+      </div>
+    </div>
+    <div class="option" data-choice="cv_recognition" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>屏幕自动识别 + 实时推荐</h3>
+        <p>通过MediaProjection截屏，OCR+CV识别弈子/血量/金币/阶段，自动推荐阵容、D牌、拿装备（核心体验）</p>
+      </div>
+    </div>
+    <div class="option" data-choice="ai_accel" onclick="toggleSelect(this)">
+      <div class="letter">C</div>
+      <div class="content">
+        <h3>联发科APU/NPU硬件加速</h3>
+        <p>使用NNAPI + MediaTek Neuron SDK对AI模型做硬件加速，确保高帧率低延迟不卡顿（技术重点）</p>
+      </div>
+    </div>
+    <div class="option" data-choice="auto_learn" onclick="toggleSelect(this)">
+      <div class="letter">D</div>
+      <div class="content">
+        <h3>自动学习 + 全网数据</h3>
+        <p>抓取虎牙/斗鱼/B站/贴吧/NGA等平台攻略，结合对局反馈做在线学习，持续优化推荐策略（高级功能）</p>
+      </div>
+    </div>
+  </div>
+</div>
